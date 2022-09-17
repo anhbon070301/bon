@@ -7,6 +7,9 @@ use App\Models\Brand;
 
 class CategoryController extends Controller
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_DELETED = 2;
     /**
      * Display a listing of the resource.
      *
@@ -14,10 +17,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $cate = Category::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $band = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $categoryList = Category::where('active', '<',2)->orderBy('sort_order', 'ASC')->get();       
-        return view('admin/category/show', compact('categoryList','cate','band'));
+        $categories = Category::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $categoryList = Category::where('active', '<', self::STATUS_DELETED)->orderBy('sort_order', 'ASC')->get();  
+
+        return view('admin/category/show', compact('categoryList', 'categories', 'brands'));
     }
 
     /**
@@ -27,9 +31,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $cate = Category::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $band = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        return view('admin/category/add',compact('cate','band'));
+        $categories = Category::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+
+        return view('admin/category/add',compact('categories', 'brands'));
     }
 
     /**
@@ -40,18 +45,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([  
+    $validatedData = $request->validate([  
             'name' => 'required|unique:categories',
             'sort_order' => 'required' 
-            
-        ]);
+    ]);
         
     $data=[
         'name' => $request->name,
         'sort_order' => $request->sort_order,
         'active' => "1"
     ];
- 
     Category::create($data);
    
     return redirect()->route('showCate');
@@ -76,10 +79,11 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $cate = Category::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $band = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
+        $categories = Category::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+
         $category = Category::findOrFail($id);
-         return view('admin/category/update' ,compact('category','cate','band'));
+         return view('admin/category/update' ,compact('category', 'categories', 'brands'));
     }
 
     /**
@@ -96,11 +100,12 @@ class CategoryController extends Controller
             'sort_order' => 'required' 
             
         ]);
+
         $category = Category::find($id);
         $category->name = $request->name;
         $category->sort_order = $request->sort_order;
-        
         $category->save();
+
         return redirect()->route('showCate');
     }
 
@@ -115,9 +120,11 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->active = "2";
         $category->save();
+        
         return redirect()->route('showCate');
     }
-    public function active(Request $request){
+    public function active(Request $request)
+    {
         $p = Category::find($request->id);
         $p->active = $request->status;
         $p->save();

@@ -1,15 +1,10 @@
 @include ('admin.index')
+
 <div class="main">
-
-
     <div class="main-inner">
-
         <div class="container">
-
             <div class="row">
-
                 <div class="span12">
-
                     <div class="widget ">
 
                         <div class="widget-header">
@@ -18,64 +13,49 @@
                         </div> <!-- /widget-header -->
 
                         <div class="widget-content">
-
-
-
-                            <form action="{{route('addCategory')}}" method="post" id="edit-profile" class="form-horizontal">
+                            <form action="{{ route('addCategory') }}" method="post" id="edit-profile" class="form-horizontal">
                                 @csrf
                                 <fieldset>
 
                                     <div class="control-group">
-                                        <label class="control-label" for="firstname">Category Name @if($errors ->has('name')) <span style="color: red;">*</span>@else <span>*</span> @endif</label>
+                                        <label class="control-label" for="firstname">Category Name @if ( $errors ->has('name') ) <span style="color: red;">*</span>@else <span>*</span> @endif</label>
                                         <div class="controls">
                                             <input type="text" class="span4" name="name" id="firstname" value="{!! old('name') !!}">
                                         </div> <!-- /controls -->
                                     </div> <!-- /control-group -->
 
-
                                     <div class="control-group">
-                                        <label class="control-label" for="lastname">Order Sort @if($errors ->has('sort_order')) <span style="color: red;">*</span>@else <span>*</span> @endif</label>
+                                        <label class="control-label" for="lastname">Order Sort @if ( $errors ->has('sort_order') ) <span style="color: red;">*</span>@else <span>*</span> @endif</label>
                                         <div class="controls">
                                             <input type="text" class="span4" id="lastname" name="sort_order" value="{!! old('sort_order') !!}">
                                         </div> <!-- /controls -->
                                     </div> <!-- /control-group -->
-                                    @if($errors -> any())
+
+                                    @if ($errors -> any())
                                     <div class="alert alert-primary text-center">
-                                        @foreach ($errors->all() as $errors)
-                                        <p>{{$errors}}</p>
+                                        @foreach ( $errors->all() as $errors )
+                                        <p>{{ $errors }}</p>
                                         @endforeach
                                     </div>
                                     @endif
+
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-primary">Save</button>
-                                        <button class="btn">Cancel</button>
+                                        <button type="clear" class="btn">Clear</button>
                                     </div> <!-- /form-actions -->
+
                                 </fieldset>
                             </form>
-
-
-
-
-
                         </div> <!-- /widget-content -->
-
+                        
                     </div> <!-- /widget -->
-
                 </div> <!-- /span8 -->
-
-
-
-
             </div> <!-- /row -->
-
         </div> <!-- /container -->
-
     </div>
-
-
-
 </div>
 <!-- het main -->
+
 <div class="extra">
     <div class="extra-inner">
         <div class="container">

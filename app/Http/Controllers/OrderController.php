@@ -17,6 +17,9 @@ use App\Models\Brand;
 
 class OrderController extends Controller
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_DELETED = 2;
     /**
      * Display a listing of the resource.
      *
@@ -24,10 +27,11 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $cate = Category::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $band = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $order = Order::where('status',0)->get();
-        return view('admin/order/show',compact('cate','band','order'));
+        $categories = Category::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $orders = Order::where('status',0)->get();
+
+        return view('admin/order/show',compact('categories','brands','orders'));
     }
 
     /**
@@ -53,11 +57,11 @@ class OrderController extends Controller
         $xa = Ward::find($request->wards);
         $address = $request->address;
         $diachi = $address.'-'.$xa->name.'-'.$huyen->name.'-'.$tinh->name;
-       
         $today = Carbon::today();
         
         $id = $request->idc;
         $cart = Cart::whereIn('id',$id)->get();
+
         $dataO = [
             'user_id' => $request->user_id,
             'customer_name' => $request->customer_name,
@@ -69,15 +73,15 @@ class OrderController extends Controller
             'address' => $diachi,
             'status' => "0"
         ];
+
         $order = Order::create($dataO);
-       if(isset($order)){
+        if( isset($order) ) {
         $customer = Customer::find($request->user_id);
         $customer->name = $request->customer_name;
         $customer->phone = $request->customer_phone;
         $customer->email = $request->customer_email;
         $customer->save();
         foreach ($cart as $c){
-           
             $data=[
                 'order_id' => $order->id,
                 'product_id' => $c->product_id,

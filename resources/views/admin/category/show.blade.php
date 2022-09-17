@@ -1,13 +1,15 @@
 @include ('admin.index')
+
 <div class="main">
     <div class="container-fluid">
         <div class="card mb-4">
+
             <div class="card-header">
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><i class="fas fa-users"></i>
                         DATA CATEGORY
                         &emsp; &emsp;</li>
-                    <li class="breadcrumb-item active"> <a href="{{route('addCate')}}" class="btn btn-primary"> <i class="icon-plus"></i> </a> </li>
+                    <li class="breadcrumb-item"> <a href="{{ route('addCate') }}" class="btn btn-primary"> <i class="icon-plus"></i> </a> </li>
                 </ol>
             </div>
 
@@ -18,24 +20,24 @@
                             <thead>
                                 <tr>
                                     <th style="width:10%">Number</th>
-                                    <th style="width:40%">Category's name</th>
+                                    <th style="width:55%">Category's name</th>
                                     <th style="width:10%">Sort order</th>
                                     <th style="width:10%">Active</th>
-                                    <th style="width:30%">Action</th>
+                                    <th style="width:15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($categoryList as $categoryKey => $category)
                                 <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $cat->name }}</td>
-                                    <td>{{ $cat->sort_order }} </td>
-                                    <td><input type="checkbox" class="toggle" value="{{ $cat->id }}"  data-id="{{ $cat->id }}" data-on="Enabled" data-off="Disabled" {{ $cat->active == 1 ? 'checked' : '' }}  data-toggle="toggle" data-width="20" data-height="10"> </td>
+                                    <td>{{ $categoryKey + 1 }}</td>
+                                    <td>{{ $category->name }}</td>
+                                    <td>{{ $category->sort_order }} </td>
+                                    <td><input type="checkbox" class="toggle" value="{{ $category->id }}"  data-id="{{ $category->id }}" data-size="mini" data-on="Enabled" data-off="Disabled" {{ $category->active == 1 ? 'checked' : '' }}  data-toggle="toggle" data-width="20" data-height="10"> </td>
                                     <td>
                                         <form method="post" action="">
-                                            <input value="{{ $cat->id }}" type="hidden" name="id" id="rowId">
-                                            <a class="btn btn-success" href="{{ route('editCate', $cat->id) }}"> <i class="icon-edit"></i></a>
-                                            <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item ?');" href="{{ route('destroyCate', $cat->id) }}"> <i class="icon-trash"></i></a>
+                                            <input value="{{ $category->id }}" type="hidden" name="id" id="rowId">
+                                            <a class="btn btn-success" href="{{ route('editCate', $category->id) }}"> <i class="icon-edit"></i></a>
+                                            <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item ?');" href="{{ route('destroyCate', $category->id) }}"> <i class="icon-trash"></i></a>
                                         </form>
                                     </td>
                                 </tr>
@@ -45,6 +47,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -124,8 +127,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js" integrity="sha512-F636MAkMAhtTplahL9F6KmTfxTmYcAcjcCkyu0f0voT3N/6vzAuJ4Num55a0gEJ+hRLHhdz3vDvZpf6kqgEa5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.css" integrity="sha512-9tISBnhZjiw7MV4a1gbemtB9tmPcoJ7ahj8QWIc0daBCdvlKjEA48oLlo6zALYm3037tPYYulT0YQyJIJJoyMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.toggle').on('change', function() {
+    $(document).ready(function() 
+    {
+        $('.toggle').on('change', function() 
+        {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var id = $(this).data('id'); 
             var _token = '{{ csrf_token() }}';

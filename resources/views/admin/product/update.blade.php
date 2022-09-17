@@ -15,6 +15,7 @@
                             <form action="{{ route('updateProducts', $products->id) }}" enctype="multipart/form-data" method="post" id="edit-profile" class="form-horizontal">
                                 @csrf
                                 <fieldset>
+
                                     <div class="control-group">
                                         <label class="control-label" for="firstname">Category <span>*</span></label>
                                         <div class="controls">
@@ -161,8 +162,9 @@
 
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-primary">Save</button>
-                                        <button class="btn" type="clear">Cancel</button>
+                                        <button class="btn" type="clear">Clear</button>
                                     </div> <!-- /form-actions -->
+
                                 </fieldset>
                             </form>
                         </div> <!-- /widget-content -->

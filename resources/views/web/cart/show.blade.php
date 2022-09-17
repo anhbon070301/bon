@@ -1,4 +1,5 @@
 @include('header')
+
 <div class="mainmenu-area">
     <div class="container">
         <div class="row">
@@ -12,9 +13,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{route('home')}}">Home</a></li>
-                    <li><a href="{{route('shop')}}">Shop page</a></li>
-                    <li class="active"><a href="{{route('showCart',Auth::user()->id)}}">Cart</a></li>
+                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('shop') }}">Shop page</a></li>
+                    <li class="active"><a href="{{ route('showCart', Auth::user()->id) }}">Cart</a></li>
                     
                     <li><a href="#">Category</a></li>
                     <li><a href="#">Others</a></li>
@@ -36,6 +37,7 @@
         </div>
     </div>
 </div> <!-- End Page title area -->
+
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
@@ -43,7 +45,7 @@
             <div class="col-md-4">
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Search Products</h2>
-                    <form action="{{route('showCart',Auth::user()->id)}}">
+                    <form action="{{ route('showCart', Auth::user()->id) }}">
                         <input type="text" name="search" placeholder="Search products...">
                         <input type="submit" value="Search">
                     </form>
@@ -51,70 +53,69 @@
 
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
-                    @foreach($products as $p)
+                    @foreach( $products as $productSearch )
                     <div class="thubmnail-recent">
-                        <img src="/phone/public/images/{{$p->image}}" class="recent-thumb" alt="">
-                        <h2><a href="{{route('showProduct',$p->id)}}">{{$p->name}}</a></h2>
+                        <img src="/phone/public/images/{{ $productSearch->image }}" class="recent-thumb" alt="">
+                        <h2><a href="{{ route('showProduct', $productSearch->id) }}">{{ $productSearch->name }}</a></h2>
                         <div class="product-sidebar-price">
-                            <ins>${{number_format($p->price)}}</ins> <del>${{number_format($p->old_price)}}</del>
+                            <ins>${{ number_format($productSearch->price) }}</ins> <del>${{ number_format($productSearch->old_price) }}</del>
                         </div>
                     </div>
                     @endforeach
-                </div>
-
-               
+                </div>               
             </div>
+
             <div class="col-md-8">
                 <div class="product-content-right">
                     <div class="woocommerce">
-                        <form method="post" action="{{route('updateCart',Auth::user()->id)}}">
+                        <form method="post" action="{{ route('updateCart', Auth::user()->id) }}">
                             @csrf
-                            <table cellspacing="0" class="shop_table cart">
+                            <table style="width:100%" cellspacing="0" class="shop_table cart">
                                 <thead>
                                     <tr>
-                                        <th class="product-remove">&nbsp;</th>
-                                        <th class="product-thumbnail">&nbsp;</th>
-                                        <th class="product-name">Product</th>
-                                        <th class="product-price">Price</th>
-                                        <th class="product-quantity">Quantity</th>
-                                        <th class="product-subtotal">Total</th>
+                                        <th style="width:5%" class="product-remove">&nbsp;</th>
+                                        <th style="width:15%" class="product-thumbnail">&nbsp;</th>
+                                        <th style="width:30%" class="product-name">Product</th>
+                                        <th style="width:10%" class="product-price">Price</th>
+                                        <th style="width:30%" class="product-quantity">Quantity</th>
+                                        <th style="width:10%" class="product-subtotal">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($cart as $c)
+                                    @foreach ( $carts as $cartList )
                                     <tr class="cart_item">
                                         <td class="product-remove">
-                                            <a title="Remove this item" class="remove" href="{{route('destroyCart',$c->id)}}">×</a>
+                                            <a title="Remove this item" class="remove" href="{{ route('destroyCart', $cartList->id) }}">×</a>
                                         </td>
 
                                         <td class="product-thumbnail">
-                                            <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="/phone/public/images/{{$c->product_image}}"></a>
+                                            <a href="{{ route('showProduct', $cartList->product_id) }}"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="/phone/public/images/{{ $cartList->product_image }}"></a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="{{route('showProduct',$c->product_id)}}">{{$c->product_name}}</a>
+                                            <a href="{{ route('showProduct', $cartList->product_id) }}">{{ $cartList->product_name }}</a>
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">${{number_format($c->product_price)}}</span>
+                                            <span class="amount">${{ number_format($cartList->product_price) }}</span>
                                         </td>
 
                                         <td class="product-quantity">
                                             <div class="quantity buttons_added">
                                                 <ul>
-                                                    <a href="{{route('tru',$c->id)}}" class="btn btn-primary minus">-</a>
-                                                    <input type="number" size="3" class="input-text qty text" title="Qty" name="quantity[{{$c->id}}]" value="{{$c->quantity}}" min="0" step="1">
-                                                    <a href="{{route('cong',$c->id)}}" class="btn btn-primary plus">+</a>
+                                                    <a href="{{ route('tru', $cartList->id) }}" class="btn btn-primary minus">-</a>
+                                                    <input type="number" size="3" class="input-text qty text" title="Qty" name="quantity[{{ $cartList->id }}]" value="{{ $cartList->quantity }}" min="0" step="1">
+                                                    <a href="{{ route('cong',  $cartList->id) }}" class="btn btn-primary plus">+</a>
                                                 </ul>
                                             </div>
                                         </td>
 
                                         <td class="product-subtotal">
-                                            <span class="amount">{{number_format($c->product_price * $c->quantity )}} </span>
+                                            <span class="amount">{{ number_format($cartList->product_price * $cartList->quantity ) }} </span>
                                         </td>
                                     </tr>
-                                    <input type="hidden" name="idc[{{$c->id}}]" value="{{$c->id}}">
+                                    <input type="hidden" name="idc[{{ $cartList->id }}]" value="{{ $cartList->id }}">
                                     @endforeach
                                     <tr>
                                         <td class="actions" colspan="6">
@@ -123,14 +124,8 @@
                                                 <input type="text" placeholder="Coupon code" value="" id="coupon_code" class="input-text" name="coupon_code">
                                                 <input type="submit" value="Apply Coupon" name="apply_coupon" class="button">
                                             </div>
-
-
-
                                             <input type="submit" value="Update Cart" name="update_cart" class="button">
-
-
                                             <input type="submit" value="Checkout" name="proceed" class="checkout-button button alt wc-forward">
-
                                         </td>
                                     </tr>
                                 </tbody>
@@ -138,35 +133,30 @@
                         </form>
 
                         <div class="cart-collaterals">
-
-
                             <div class="cross-sells">
                                 <h2>You may be interested in...</h2>
                                 <ul class="products">
-                                @foreach($pro_is_best_sell as $pr)
-                                    <li class="product" >
-                                        <a href="{{route('showProduct',$pr->id)}}">
-                                            <img width="325" height="325" alt="T_4_front" class="attachment-shop_catalog wp-post-image" src="/phone/public/images/{{$pr->image}}">
-                                            <h3  style="height: 50px;">{{$pr->name}}</h3>
-                                            <span class="price"><span class="amount">${{$pr->price}}</span></span>
+                                @foreach( $productBestSell as $productBestSellData )
+                                    <li class="product">
+                                        <a href="{{  route('showProduct', $productBestSellData->id) }}">
+                                            <img style="height: 100px;" alt="T_4_front" class="attachment-shop_catalog wp-post-image" src="/phone/public/images/{{ $productBestSellData->image }}">
+                                            <h3 style="height: 60px;">{{ $productBestSellData->name }}</h3>
+                                            <span class="price"><span class="amount">${{ number_format($productBestSellData->price) }}</span></span>
                                         </a>
-
-                                        <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="22" rel="nofollow" href="{{route('showProduct',$pr->id)}}">Select options</a>
+                                        <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="22" rel="nofollow" href="{{ route('showProduct', $productBestSellData->id) }}">Select options</a>
                                     </li>
-                                @endforeach
-                                 
+                                @endforeach                                
                                 </ul>
                             </div>
 
-
                             <div class="cart_totals ">
                                 <h2>Cart Totals</h2>
-
                                 <table cellspacing="0">
                                     <tbody>
+
                                         <tr class="cart-subtotal">
                                             <th>Cart Subtotal</th>
-                                            <td><span class="amount">{{number_format($totalMoney)}} VND</span></td>
+                                            <td><span class="amount">${{ number_format($totalMoney) }}</span></td>
                                         </tr>
 
                                         <tr class="shipping">
@@ -176,21 +166,22 @@
 
                                         <tr class="order-total">
                                             <th>Order Total</th>
-                                            <td><strong><span class="amount">{{ number_format($totalMoney)}} VND</span></strong> </td>
+                                            <td><strong><span class="amount">${{ number_format($totalMoney)}}</span></strong> </td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
 
-
                         </div>
+
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+
 <div class="footer-top-area">
         <div class="zigzag-bottom"></div>
         <div class="container">

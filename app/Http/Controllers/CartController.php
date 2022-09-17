@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cart;
-use DB;
 use App\Models\Product;
 use App\Models\Ward;
 use App\Models\District;
@@ -13,6 +12,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_DELETED = 2;
+    const PER_PAGE = 10;
+    const PER_PAGE_FRONT = 12;
     /**
      * Display a listing of the resource.
      *
@@ -41,15 +45,13 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $cart = Cart::where('product_id',$request->product_id )->where('user_id', $request->user_id)->first();;
+        $carts = Cart::where('product_id',$request->product_id )->where('user_id', $request->user_id)->first();;
         
-        if(!empty($cart)){
-         $newQuantity = $cart->quantity + $request->quantity;
-           
-           $cart->quantity = $newQuantity;
-           $cart->save();
-         
-        }else{
+        if ( !empty($carts) ) {
+            $newQuantity = $carts->quantity + $request->quantity;
+            $carts->quantity = $newQuantity;
+            $carts->save();
+        }else {
             $data = [
                 'user_id' => $request->user_id,
                 'product_id' => $request->product_id,
@@ -57,14 +59,11 @@ class CartController extends Controller
                 'product_name' => $request->product_name,
                 'product_price' => $request->product_price,
                 'product_image' => $request->product_image
-    
             ];
         
             Cart::create($data);
-           
         }
        
-
         return redirect()->route('showCart',Auth::user()->id);
     }
 
@@ -79,19 +78,19 @@ class CartController extends Controller
         $totalMoney = 0;
         $quantity = 0;
         $products = [];
-        if(isset($request->search)){
-            $products = Product::where('active', 1)->where('name','like','%'.$request->search.'%')->orderBy('sort_order', 'ASC')->paginate(2);       
-        }else{
-            $products = Product::where('active', 1)->where('sort_order','=', 1)->orderBy('sort_order', 'ASC')->get(); 
+        if ( isset($request->search) ) {
+            $products = Product::where('active', self::STATUS_ACTIVE)->where('name', 'like', '%'.$request->search.'%')->orderBy('sort_order', 'ASC')->paginate(2);       
+        }else {
+            $products = Product::where('active', self::STATUS_ACTIVE)->where('sort_order','=', 1)->orderBy('sort_order', 'ASC')->get(); 
         }
-        
-        $pro_is_best_sell = Product::where('active', 1)->where('is_best_sell','=', 1)->orderBy('sort_order', 'ASC')->paginate(2); 
-        $cart = Cart::where('user_id',$id)->get();
-        foreach ($cart as $key => $c){
-            $totalMoney +=  floatval($c['product_price']) *  floatval($c['quantity']);
-            $quantity = $key + 1;
+        $productBestSell = Product::where('active', self::STATUS_ACTIVE)->where('is_best_sell', '=', 1)->orderBy('sort_order', 'ASC')->paginate(2); 
+        $carts = Cart::where('user_id', $id)->get();
+        foreach ( $carts as $keyCart => $cartData ) {
+            $totalMoney +=  floatval($cartData['product_price']) *  floatval($cartData['quantity']);
+            $quantity = $keyCart + 1;
         }
-        return view('web/cart/show',compact('cart','products','pro_is_best_sell'))->with('totalMoney',$totalMoney)->with('quantity',$quantity);
+
+        return view('web/cart/show',compact('carts', 'products', 'productBestSell'))->with('totalMoney', $totalMoney)->with('quantity', $quantity);
     }
 
     /**
@@ -112,67 +111,75 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function cong($id)
     {
         $cart = Cart::find($id);
         $quantity = $cart->quantity + 1 ;
         $cart->quantity = $quantity;
         $cart->save();
+
         return redirect()->route('showCart',Auth::user()->id);
     }
+
     public function tru($id)
     {
         $cart = Cart::find($id);
         $quantity = $cart->quantity - 1 ;
         $cart->quantity = $quantity;
         $cart->save();
+        
         return redirect()->route('showCart',Auth::user()->id);
     }
-    public function update(Request $request,$id)
-    {
-        if(isset($request->update_cart))
-        {
-            $cart = Cart::whereIn('id',$request->idc)->get();
 
-            foreach ($cart as $c){
-                $cartU = Cart::find($c->id);
-                $cartU->quantity = $request->quantity[$c->id];
-                $cartU->save();
+    public function update(Request $request, $id)
+    {
+        if( isset($request->update_cart) )
+        {
+            $carts = Cart::whereIn('id', $request->idc)->get();
+
+            foreach ( $carts as $cartData ) {
+                $cartUpdate = Cart::find($cartData->id);
+                $cartUpdate->quantity = $request->quantity[$cartData->id];
+                $cartUpdate->save();
             }
             
-            return redirect()->route('showCart',Auth::user()->id);
-        }else{
+            return redirect()->route('showCart', Auth::user()->id);
+        }else {
             $totalMoney = 0;
             $quantity = 0;
             $products = []; 
-            if(isset($request->search)){
-                $products = Product::where('active', 1)->where('name','like','%'.$request->search.'%')->orderBy('sort_order', 'ASC')->paginate(2);       
-            }else{
-                $products = Product::where('active', 1)->where('sort_order','=', 1)->orderBy('sort_order', 'ASC')->get(); 
+
+            if ( isset($request->search) ) {
+                $products = Product::where('active', self::STATUS_ACTIVE)->where('name','like','%'.$request->search.'%')->orderBy('sort_order', 'ASC')->paginate(2);       
+            }else {
+                $products = Product::where('active', self::STATUS_ACTIVE)->where('sort_order','=', 1)->orderBy('sort_order', 'ASC')->get(); 
             }
             
             $provinces = Province::all();
-            $pro_is_best_sell = Product::where('active', 1)->where('is_best_sell','=', 1)->orderBy('sort_order', 'ASC')->paginate(2); 
-            $cart = Cart::whereIn('id',$request->idc)->where('user_id',$id)->get();
-            foreach ($cart as $key => $c){
-                $totalMoney +=  floatval($c['product_price']) *  floatval($c['quantity']);
+            $productBestSell = Product::where('active', self::STATUS_ACTIVE)->where('is_best_sell','=', 1)->orderBy('sort_order', 'ASC')->paginate(2); 
+            $carts = Cart::whereIn('id', $request->idc)->where('user_id', $id)->get();
+            foreach ( $carts as $key => $cartData ) {
+                $totalMoney +=  floatval($cartData['product_price']) *  floatval($cartData['quantity']);
                 $quantity = $key +1;
             }
             
-            return view('web/order/add',compact('cart','products','pro_is_best_sell','provinces'))->with('quantity',$quantity)->with('totalMoney',$totalMoney);
+            return view('web/order/add',compact('carts','products','productBestSell','provinces'))->with('quantity',$quantity)->with('totalMoney',$totalMoney);
         }
     }
-    public function select_delivery(Request $request){
+
+    public function select_delivery(Request $request)
+    {
         $data = $request->all();
         $output = "";
-        if($data['action']){
-            if($data['action'] == 'provinces'){
+        if( $data['action'] ) {
+            if( $data['action'] == 'provinces' ) {
                 $huyen = District::where('province_id',$data['id'])->get();
                 $output.='<option value="">---Chọn Huyện---</option>';
                 foreach ($huyen as $h){
                     $output.='<option value="'.$h->id.'">'.$h->name.'</option>';
                 }
-            }else{
+            }else {
                 $xa = Ward::where('district_id',$data['id'])->get();
                 $output.='<option value="">---Chọn Xã---</option>';
                 foreach ($xa as $x){
@@ -192,6 +199,7 @@ class CartController extends Controller
     {
         $cart = Cart::find($id);
         $cart->delete();
+        
         return redirect()->route('showCart',Auth::user()->id);
     }
 }

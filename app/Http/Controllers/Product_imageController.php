@@ -116,15 +116,18 @@ class Product_imageController extends Controller
         $image = Product_image::find($id);
         $image->active = "2";
         $image->save();
-        return redirect()->route('showImage',$idp);
+        return redirect()->route('showImage', $idp);
     }
-  public function home(){
-    $banners = Banner::where('active', 1)->orderBy('sort_order', 'ASC')->get();  
-    $brands = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-    $best_sell = Product::where('active', 1)->where('is_best_sell',1)->orderBy('sort_order', 'ASC')->paginate(3);
-    $new = Product::where('active', 1)->where('is_new',1)->orderBy('sort_order', 'ASC')->paginate(3);
-    $products = Product::where('active', 1)->where('is_new',1)->orderBy('sort_order', 'ASC')->get(); 
+
+    public function home()
+    {
+        $banners = Banner::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();  
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $best_sell = Product::where('active', self::STATUS_ACTIVE)->where('is_best_sell', 1)->orderBy('sort_order', 'ASC')->paginate(3);
+        $new = Product::where('active', self::STATUS_ACTIVE)->where('is_new', 1)->orderBy('sort_order', 'ASC')->paginate(3);
+        $products = Product::where('active', self::STATUS_ACTIVE)->where('is_new',1)->orderBy('sort_order', 'ASC')->get(); 
     
-    return view('welcome',compact('banners','products','brands','best_sell','new')); 
+        return view('welcome', compact('banners', 'products', 'brands', 'best_sell', 'new')); 
   }
+  
 }

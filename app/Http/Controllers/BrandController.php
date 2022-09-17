@@ -22,7 +22,7 @@ class BrandController extends Controller
         $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
         $brandList = Brand::where('active', '<', 2)->orderBy('sort_order', 'ASC')->get();       
         
-        return view('admin/brands/show', compact('brands','categories','brandList'));
+        return view('admin/brands/show', compact('brands', 'categories', 'brandList'));
     }
 
     /**
@@ -32,9 +32,10 @@ class BrandController extends Controller
      */
     public function create()
     {
-        $cate = Category::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $band = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        return view('admin/brands/add',compact('cate','band'));
+        $categories = Category::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        
+        return view('admin/brands/add',compact('categories', 'brands'));
     }
 
     /**
@@ -62,7 +63,7 @@ class BrandController extends Controller
             'active'=> "1"
             
         ];
-     
+
         Brand::create($data);
        
         return redirect()->route('showBrand');
@@ -87,10 +88,11 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        $cate = Category::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $band = Brand::where('active', 1)->orderBy('sort_order', 'ASC')->get();
-        $brands = Brand::findOrFail($id);
-         return view('admin/brands/update' ,compact('brands','cate','band'));
+        $categories = Category::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brands = Brand::where('active', self::STATUS_ACTIVE)->orderBy('sort_order', 'ASC')->get();
+        $brand = Brand::findOrFail($id);
+
+        return view('admin/brands/update' ,compact('brands', 'categories', 'brand'));
     }
 
     /**
@@ -106,6 +108,7 @@ class BrandController extends Controller
             'name' => 'required',
             'sort_order' => 'required' 
         ]);
+
         $image_name ="";
         if( $request->has('image')){
             $image = $request->file('image');
@@ -137,13 +140,14 @@ class BrandController extends Controller
         $brands = Brand::find($id);
         $brands->active = "2";
         $brands->save();
+
         return redirect()->route('showBrand');
     }
-    public function active(Request $request){
+    public function active(Request $request)
+    {
         $p = Brand::find($request->id);
         $p->active = $request->status;
         $p->save();
-        echo($request->status);
-        
+        echo($request->status);      
     }
 }

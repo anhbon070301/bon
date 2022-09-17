@@ -13,10 +13,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{route('home')}}">Home</a></li>
-                    <li><a href="{{route('shop')}}">Shop page</a></li>
-                    @if(isset(Auth::user()->id))
-                    <li><a href="{{route('showCart',Auth::user()->id)}}">Cart</a></li>
+                    <li class="active"><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('shop') }}">Shop page</a></li>
+                    @if ( isset(Auth::user()->id) )
+                    <li><a href="{{ route('showCart', Auth::user()->id) }}">Cart</a></li>
                     @endif
                     <li><a href="#">Category</a></li>
                     <li><a href="#">Others</a></li>
@@ -31,24 +31,22 @@
     <!-- Slider -->
     <div class="block-slider block-slider4">
         <ul class="" id="bxslider-home4">
-            @foreach ($banners as $b)
+            @foreach ($banners as $bannerData)
             <div class="row">
-
                 <li>
                     <div class="col-md-4 col-sm-4">
-                        <img src="/phone/public/images/{{$b->image_url}}" alt="Slide">
+                        <img src="/phone/public/images/{{ $bannerData->image_url }}" alt="Slide">
                     </div>
                     <div class="col-md-8 col-sm-8">
                         <div class="caption-group">
                             <h2 class="caption title">
-                                {{$b->title}}
+                                {{ $bannerData->title }}
                             </h2>
-                            <h4 class="caption subtitle">{{$b->content}}</h4>
+                            <h4 class="caption subtitle">{{ $bannerData->content }}</h4>
                             <a class="caption button-radius" href="#"><span class="icon"></span>Shop now</a>
                         </div>
                     </div>
                 </li>
-
             </div>
             @endforeach
         </ul>
@@ -96,30 +94,30 @@
                 <div class="latest-product">
                     <h2 class="section-title">Latest Products</h2>
                     <div class="product-carousel">
-                        @foreach ($products as $p)
-                        <form action="{{route('storeCart')}}" method="post">
+                        @foreach ($products as $productData)
+                        <form action="{{ route('storeCart') }}" method="post">
                             @csrf
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="/phone/public/images/{{$p->image}}" style="height: 250px;" alt="">
+                                    <img src="/phone/public/images/{{ $productData->image }}" style="height: 250px;" alt="">
                                     <div class="product-hover">
-                                        <a href="{{route('showProduct',$p->id)}}" class="view-details-link"><i class="fa fa-link"></i> See details</a>
+                                        <a href="{{ route('showProduct', $productData->id) }}" class="view-details-link"><i class="fa fa-link"></i> See details</a>
                                     </div>
                                 </div>
 
-                                <h2><a href="{{route('showProduct',$p->id)}}">{{$p->name}}</a></h2>
+                                <h2 style="height: 50px;"><a href="{{ route('showProduct', $productData->id) }}">{{ $productData->name }}</a></h2>
 
                                 <div class="product-carousel-price">
-                                    <ins>${{number_format($p->price)}}</ins> <del>$${{number_format($p->old_price)}}</del>
+                                    <ins>${{ number_format($productData->price) }}</ins> <del>$${{ number_format($productData->old_price) }}</del>
                                 </div>
                                 <button class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Add to cart</button>
                             </div>
-                            <input type="hidden" value="{{Auth::user()->id}}" name="user_id">
-                            <input type="hidden" value="{{$p->id}}" name="product_id">
+                            <input type="hidden" value="{{ Auth::user()->id }}" name="user_id">
+                            <input type="hidden" value="{{ $productData->id }}" name="product_id">
                             <input type="hidden" value="1" name="quantity">
-                            <input type="hidden" value="{{$p->name}}" name="product_name">
-                            <input type="hidden" value="{{$p->image}}" name="product_image">
-                            <input type="hidden" value="{{$p->price}}" name="product_price">
+                            <input type="hidden" value="{{ $productData->name }}" name="product_name">
+                            <input type="hidden" value="{{ $productData->image }}" name="product_image">
+                            <input type="hidden" value="{{ $productData->price }}" name="product_price">
                         </form>
                         @endforeach
                     </div>
@@ -136,8 +134,8 @@
             <div class="col-md-12">
                 <div class="brand-wrapper">
                     <div class="brand-list">
-                        @foreach ($brands as $br)
-                        <img src="/phone/public/images/{{$br->image_url}}" alt="">
+                        @foreach ( $brands as $brandData )
+                        <img src="/phone/public/images/{{ $brandData->image_url }}" alt="">
                         @endforeach
                     </div>
                 </div>
@@ -154,10 +152,10 @@
                 <div class="single-product-widget">
                     <h2 class="product-wid-title">Top Sellers</h2>
                     <a href="" class="wid-view-more">View All</a>
-                    @foreach ($best_sell as $best)
+                    @foreach ( $best_sell as $best )
                     <div class="single-wid-product">
-                        <a href="{{route('showProduct',$best->id)}}"><img src="/phone/public/images/{{$best->image}}" alt="" class="product-thumb"></a>
-                        <h2><a href="{{route('showProduct',$best->id)}}">{{$best->name}}</a></h2>
+                        <a href="{{route('showProduct',$best->id)}}"><img src="/phone/public/images/{{ $best->image }}" alt="" class="product-thumb"></a>
+                        <h2><a href="{{ route('showProduct', $best->id) }}">{{ $best->name }}</a></h2>
                         <div class="product-wid-rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -166,7 +164,7 @@
                             <i class="fa fa-star"></i>
                         </div>
                         <div class="product-wid-price">
-                            <ins>${{$best->price}}</ins> <del>${{$best->old_price}}</del>
+                            <ins>${{ $best->price }}</ins> <del>${{ $best->old_price }}</del>
                         </div>
                     </div>
                    @endforeach
@@ -176,12 +174,11 @@
             <div class="col-md-6">
                 <div class="single-product-widget">
                     <h2 class="product-wid-title">Top New</h2>
-                    <a href="#" class="wid-view-more">View All</a>
-                    
-                    @foreach ($new as $n)
+                    <a href="#" class="wid-view-more">View All</a>   
+                    @foreach ( $new as $n )
                     <div class="single-wid-product">
-                        <a href="{{route('showProduct',$n->id)}}"><img src="/phone/public/images/{{$n->image}}" alt="" class="product-thumb"></a>
-                        <h2><a href="{{route('showProduct',$n->id)}}">{{$n->name}}</a></h2>
+                        <a href="{{ route('showProduct' ,$n->id) }}"><img src="/phone/public/images/{{ $n->image }}" alt="" class="product-thumb"></a>
+                        <h2><a href="{{ route('showProduct', $n->id) }}">{{ $n->name }}</a></h2>
                         <div class="product-wid-rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -190,7 +187,7 @@
                             <i class="fa fa-star"></i>
                         </div>
                         <div class="product-wid-price">
-                            <ins>${{$n->price}}</ins> <del>${{$n->old_price}}</del>
+                            <ins>${{ number_format($n->price) }}</ins> <del>${{ number_format($n->old_price) }}</del>
                         </div>
                     </div>
                    @endforeach

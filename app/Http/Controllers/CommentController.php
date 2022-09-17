@@ -82,6 +82,7 @@ class CommentController extends Controller
         $comment = Comment::find($request->id);
         $comment->comments = $request->comment;
         $comment->save();
+        
         return redirect()->route('showProduct',$request->product_id);
     }
 

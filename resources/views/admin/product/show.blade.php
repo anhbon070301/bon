@@ -114,7 +114,7 @@
                                     <th style="width:2%"> Number </th>
                                     <th style="width:10%"> Image </th>
                                     <th style="width:25%"> Product Name </th>
-                                    <th style="width:8%"> Brand </th>
+                                    <th style="width:12%"> Brand </th>
                                     <th style="width:13%"> Category </th>
                                     <th style="width:5%"> Price </th>
                                     <th style="width:5%"> Old Price </th>
@@ -122,22 +122,22 @@
                                     <th style="width:3%"> New </th>
                                     <th style="width:5%"> Order Sort </th>
                                     <th style="width:2%"> Active </th>
-                                    <th style="width:19%"> Action </th>
+                                    <th style="width:15%"> Action </th>
                                 </tr>
                             </thead>
                             <tbody id="list">
-                                @foreach($products as $key => $product)
+                                @foreach( $products as $productKey => $product )
                                 <tr>
-                                    <td> {{ $key + 1 }} </td>
-                                    <td><img src="/phone/public/images/{{ $product->image }}" width="100px" alt="Khong tai duoc"></td>
+                                    <td> {{ $productKey + 1 }} </td>
+                                    <td><img src="/phone/public/images/{{ $product->image }}" width="100px" alt="No Image"></td>
                                     <td>{{ $product->name }}</td>
-                                    @foreach ($brands as $brand)
-                                        @if ($brand->id == $product->brand_id)
+                                    @foreach ( $brands as $brand )
+                                        @if ( $brand->id == $product->brand_id )
                                             <td>{{ $brand->name }}</td>
                                         @endif
                                     @endforeach
-                                    @foreach ($categories as $category)
-                                        @if($category->id == $product->category_id)
+                                    @foreach ( $categories as $category )
+                                        @if( $category->id == $product->category_id )
                                             <td>{{ $category->name }}</td>
                                         @endif
                                     @endforeach
@@ -155,13 +155,13 @@
                                     @endif
                                     <td>{{ $product->sort_order  }}</td>
                                     <input type="hidden" value="{{ $product->id }}" class="id" id="idp">
-                                    <td><input type="checkbox" class="toggle mini" value="{{ $product->id }}" data-id="{{ $product->id }}" data-on="On" data-off="Off" data-size="mini" data-toggle="toggle" data-width="15" data-height="10" {{ $product->active == 1 ? 'checked' : '' }} ></td>
+                                    <td><input type="checkbox" class="toggle mini" value="{{ $product->id }}" data-id="{{ $product->id }}" data-on="Enable" data-off="Disable" data-size="mini" data-toggle="toggle" data-width="15" data-height="10" {{ $product->active == 1 ? 'checked' : '' }} ></td>
                                     <td>
                                         <form method="post" action="">
                                             <input value="{{ $product->id }}" type="hidden" name="id" id="tenhang">
                                             <a class="btn btn-success" href="{{  route('editProducts', $product->id)  }}"> <i class="icon-edit"></i> </a>
                                             <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item ?');" href="{{ route('destroyProducts', $product->id) }}"> <i class="icon-trash"></i></a>
-                                                <a class="btn btn-info" href="{{ route('showImage', $product->id) }}"> <i class="icon-eye-open"></i> </a>
+                                            <a class="btn btn-info" href="{{ route('showImage', $product->id) }}"> <i class="icon-eye-open"></i> </a>
                                         </form>
                                     </td>
                                 </tr>
@@ -254,9 +254,12 @@
     <!-- /footer-inner -->
 </div>
 <!-- /footer -->
+
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.toggle').on('change', function() {
+    $(document).ready(function() 
+    {
+        $('.toggle').on('change', function() 
+        {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var id = $(this).data('id');
             var _token = '{{csrf_token()}}';

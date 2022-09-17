@@ -7,7 +7,7 @@
           <li class="breadcrumb-item"><i class="fas fa-users"></i>
             DATA BRAND
             &emsp; &emsp;</li>
-          <li class="breadcrumb-item"> <a href="{{route('createBrand')}}" class="btn btn-primary"> <i class="icon-plus"></i> </a> </li>
+          <li class="breadcrumb-item"> <a href="{{ route('createBrand') }}" class="btn btn-primary"> <i class="icon-plus"></i> </a> </li>
         </ol>
       </div>
       <div class="card-body">
@@ -17,45 +17,43 @@
             <table style="width:100%" class="table table-striped table-bordered">
               <thead>
                 <tr>
-                  <th style="width:10%"> Number </th>
+                  <th style="width:5%"> Number </th>
                   <th style="width:20%"> Image </th>
-                  <th style="width:20%"> Brand </th>
-                  <th style="width:10%"> Link </th>
+                  <th style="width:25%"> Brand </th>
+                  <th style="width:15%"> Link </th>
                   <th style="width:10%"> Active </th>
                   <th style="width:10%"> Sort Order </th>
-                  <th style="width:20%"> Action </th>
+                  <th style="width:15%"> Action </th>
                 </tr>
               </thead>
               <tbody>
-                @foreach($brandList as $key => $brandList)
+                @foreach ( $brandList as $brandKey => $brandData )
                 <tr>
-                  <td>{{$key + 1}}</td>
-                  <td><img src="../public/images/{{$brandList->image_url}}"  width="100px" alt="Khong tai duoc"></td>
-                  <td>{{$brandList->name}}</td>
-                  <td>{{$brandList->link}}</td>
-                  <td><input type="checkbox" class="toggle" value="{{$brandList->id}}" data-size="mini"  data-id="{{$brandList->id}}" data-on="Enabled" data-off="Disabled" {{$brandList->active == 1 ? 'checked' : ''}}  data-toggle="toggle" data-width="20" data-height="10"></td>
-                  <td>{{$brandList->sort_order}}</td>
+                  <td>{{ $brandKey + 1 }}</td>
+                  <td><img src="../public/images/{{ $brandData->image_url }}"  width="100px" alt="No image"></td>
+                  <td>{{ $brandData->name }}</td>
+                  <td>{{ $brandData->link }}</td>
+                  <td><input type="checkbox" class="toggle" value="{{$brandData->id}}" data-size="mini"  data-id="{{$brandData->id}}" data-on="Enabled" data-off="Disabled" {{ $brandData->active == 1 ? 'checked' : '' }}  data-toggle="toggle" data-width="20" data-height="10"></td>
+                  <td>{{$brandData->sort_order}}</td>
                   <td>
                     <form method="post" action="">
-                      <input value="{{$brandList->id}}" type="hidden" name="id" id="">
-                      <a class="btn btn-success" href="{{route('editBrand', $brandList->id)}}"> <i class="icon-edit"></i> </a> &emsp;
-                      <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item ?');" href="{{route('destroyBrand', $brandList->id)}}"> <i class="icon-trash"></i> </a> &emsp;
+                      <input value="{{$brandData->id}}" type="hidden" name="id" id="">
+                      <a class="btn btn-success" href="{{route('editBrand', $brandData->id)}}"> <i class="icon-edit"></i> </a> &emsp;
+                      <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item ?');" href="{{route('destroyBrand', $brandData->id)}}"> <i class="icon-trash"></i> </a> &emsp;
                     </form>
-
                   </td>
                 </tr>
                 @endforeach
-
-
               </tbody>
-
             </table>
           </div>
+
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <div class="extra">
   <div class="extra-inner">
     <div class="container">
@@ -129,9 +127,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js" integrity="sha512-F636MAkMAhtTplahL9F6KmTfxTmYcAcjcCkyu0f0voT3N/6vzAuJ4Num55a0gEJ+hRLHhdz3vDvZpf6kqgEa5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.css" integrity="sha512-9tISBnhZjiw7MV4a1gbemtB9tmPcoJ7ahj8QWIc0daBCdvlKjEA48oLlo6zALYm3037tPYYulT0YQyJIJJoyMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script type="text/javascript">
-    $(document).ready(function() {
-
-        $('.toggle').on('change',function(){
+    $(document).ready(function() 
+    {
+        $('.toggle').on('change',function()
+        {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var id = $(this).data('id'); 
             var _token = '{{csrf_token()}}';

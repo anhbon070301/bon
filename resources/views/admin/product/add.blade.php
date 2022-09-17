@@ -23,6 +23,7 @@ input.first {
                                 class="form-horizontal" enctype="multipart/form-data">
                                 @csrf
                                 <fieldset>
+                                    
                                     <div class="control-group">
                                         <label class="control-label" for="firstname">Category <span>*</span></label>
                                         <div class="controls">
@@ -124,10 +125,12 @@ input.first {
                                         @endforeach
                                     </div>
                                     @endif
+
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-primary">Save</button>
-                                        <button class="btn">Cancel</button>
+                                        <button class="btn" type="clear">Clear</button>
                                     </div> <!-- /form-actions -->
+
                                 </fieldset>
                             </form>
                         </div> <!-- /widget-content -->

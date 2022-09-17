@@ -1,5 +1,16 @@
 @include('header')
 
+<style>
+    button,
+    input,
+    select,
+    textarea {
+        margin: 0;
+        font-size: 100%;
+        vertical-align: middle;
+    }
+</style>
+
 <div class="mainmenu-area">
     <div class="container">
         <div class="row">
@@ -13,10 +24,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{route('home')}}">Home</a></li>
-                    <li><a href="{{route('shop')}}">Shop page</a></li>
-                    <li><a href="{{route('showCart',Auth::user()->id)}}">Cart</a></li>
-                    
+                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('shop') }}">Shop page</a></li>
+                    <li><a href="{{ route('showCart', Auth::user()->id) }}">Cart</a></li>
+
                     <li><a href="#">Category</a></li>
                     <li><a href="#">Others</a></li>
                     <li><a href="#">Contact</a></li>
@@ -37,18 +48,20 @@
         </div>
     </div>
 </div> <!-- End Page title area -->
+
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
+
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Search Products</h2>
-                    <form action="{{route('updateCart',Auth::user()->id)}}" method="post">
+                    <form action="{{ route('updateCart', Auth::user()->id) }}" method="post">
                         @csrf
                         <input type="text" name="search" placeholder="Search products...">
-                        @foreach ($cart as $c)
-                            <input type="hidden" name="idc[{{$c->id}}]" value="{{$c->id}}">
+                        @foreach ($carts as $cartData)
+                        <input type="hidden" name="idc[{{ $cartData->id }}]" value="{{ $cartData->id }}">
                         @endforeach
                         <input type="submit" value="Search">
                     </form>
@@ -56,29 +69,28 @@
 
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
-                    @foreach($products as $p)
+                    @foreach($products as $productSearch)
                     <div class="thubmnail-recent">
-                        <img src="/phone/public/images/{{$p->image}}" class="recent-thumb" alt="">
-                        <h2><a href="{{route('showProduct',$p->id)}}">{{$p->name}}</a></h2>
+                        <img src="/phone/public/images/{{ $productSearch->image }}" class="recent-thumb" alt="">
+                        <h2><a href="{{route('showProduct', $productSearch->id)}}">{{ $productSearch->name }}</a></h2>
                         <div class="product-sidebar-price">
-                            <ins>${{number_format($p->price)}}</ins> <del>${{number_format($p->old_price)}}</del>
+                            <ins>${{ number_format($productSearch->price) }}</ins> <del>${{ number_format($productSearch->old_price) }}</del>
                         </div>
                     </div>
                     @endforeach
                 </div>
 
-
             </div>
+
             <div class="col-md-8">
                 <div class="product-content-right">
                     <div class="woocommerce">
-                        <form name="frmAddCart" method="post" action="{{route('storeOrder')}}">
+                        <form name="frmAddCart" method="post" action="{{ route('storeOrder') }}">
                             @csrf
                             <div class="col-3">
                                 <table cellspacing="0" class="shop_table cart">
                                     <thead>
                                         <tr>
-
                                             <th class="product-thumbnail">Image</th>
                                             <th class="product-name">Product</th>
                                             <th class="product-price">Price</th>
@@ -87,132 +99,125 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        @foreach ($cart as $c)
+                                        @foreach ($carts as $cartList)
                                         <tr class="cart_item">
 
-
                                             <td class="product-thumbnail">
-                                                <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="/phone/public/images/{{$c->product_image}}"></a>
+                                                <a href="{{ route('showProduct', $cartList->product_id) }}"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="/phone/public/images/{{ $cartList->product_image }}"></a>
                                             </td>
 
                                             <td class="product-name">
-                                                <a href="single-product.html">{{$c->product_name}}</a>
+                                                <a href="{{ route('showProduct', $cartList->product_id) }}">{{ $cartList->product_name }}</a>
                                             </td>
 
                                             <td class="product-price">
-                                                <span class="amount">${{number_format($c->product_price)}}</span>
+                                                <span class="amount">${{ number_format($cartList->product_price) }}</span>
                                             </td>
 
                                             <td class="product-quantity">
                                                 <div class="quantity buttons_added">
                                                     <ul>
-
-                                                        <input type="text" disabled size="3" class="input-text qty text" title="Qty" name="" value="{{$c->quantity}}" min="0" step="1">
-                                                        <input type="hidden" size="3" class="input-text qty text" title="Qty" name="quantity" value="{{$c->quantity}}" min="0" step="1">
+                                                        <input type="text" disabled size="3" class="input-text qty text" title="Qty" name="" value="{{ $cartList->quantity }}" min="0" step="1">
+                                                        <input type="hidden" size="3" class="input-text qty text" title="Qty" name="quantity" value="{{ $cartList->quantity }}" min="0" step="1">
                                                     </ul>
                                                 </div>
                                             </td>
 
                                             <td class="product-subtotal">
-                                                <span class="amount">{{number_format($c->product_price * $c->quantity )}} </span>
+                                                <span class="amount">{{ number_format($cartList->product_price * $cartList->quantity ) }} </span>
                                             </td>
-                                        </tr>
-                                        <input type="hidden" name="idc[{{$c->id}}]" value="{{$c->id}}">
-                                        @endforeach
 
+                                        </tr>
+                                        <input type="hidden" name="idc[{{ $cartList->id }}]" value="{{ $cartList->id }}">
+                                        @endforeach
                                     </tbody>
                                 </table>
-
                             </div>
+
                             <div class="col-5">
                                 <div class="woocommerce-billing-fields">
                                     <h3>Billing Details</h3>
-                                    
-                                    <input type="hidden" value="{{Auth::user()->id}}" placeholder="" id="user_id" name="user_id" class="input-text ">
-                                    <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                        <label class="" for="billing_first_name">Name <abbr title="required" class="required">*</abbr>
-                                        </label>
-                                        <input type="text" value="" placeholder="" id="billing_first_name" required name="customer_name" class="input-text ">
-                                    </p>
+                                    <input type="hidden" value="{{ Auth::user()->id }}" placeholder="" id="user_id" name="user_id" class="input-text ">
 
-                                    <p id="billing_last_name_field" class="form-row form-row-last validate-required">
-                                        <label class="" for="billing_last_name">Phone <abbr title="required" class="required">*</abbr>
-                                        </label>
-                                        <input type="text" value="" placeholder="" id="billing_last_name" required name="customer_phone" class="input-text ">
-                                    </p>
-                                    <div class="clear"></div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Name <abbr title="required" class="required">*</abbr></label>
+                                        <input style="width: 50%" required name="customer_phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Name">
+                                    </div>
 
-                                    <p id="billing_company_field" class="form-row form-row-wide">
-                                        <label class="" for="billing_company">Email</label>
-                                        <input type="text" value="{{Auth::user()->email}}" placeholder="" id="billing_company" name="customer_email" class="input-text ">
-                                    </p>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Phone <abbr title="required" class="required">*</abbr></label>
+                                        <input style="width: 50%" required name="customer_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Phone">
+                                    </div>
 
-                                    <p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
-                                        <label class="" for="billing_address_1">Total
-                                        </label>
-                                        <input type="text" value="{{$totalMoney}}" placeholder="" id="billing_address_1" name="total_money" class="input-text ">
-                                    </p>
-                                    <p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
-                                        <label class="" for="billing_address_1">Total Product
-                                        </label>
-                                        <input type="text" value="{{$quantity}}" placeholder="" id="billing_address_1" name="total_products" class="input-text ">
-                                    </p>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email <abbr title="required" class="required">*</abbr></label>
+                                        <input style="width: 50%" value="{{ Auth::user()->email }}" required name="customer_email" class="form-control" id="exampleInputEmail1">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Total Product <abbr title="required" class="required">*</abbr></label>
+                                        <input style="width: 50%" value="{{ $quantity }}" required name="total_products" class="form-control" id="exampleInputEmail1">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Total <abbr title="required" class="required">*</abbr></label>
+                                        <input style="width: 50%" value="{{ $totalMoney }}" required name="total_money" class="form-control" id="exampleInputEmail1">
+                                    </div>
+
                                     <h3>Address</h3>
-                                    
-                                    <input type="hidden" value="{{Auth::user()->id}}" placeholder="" id="user_id" name="user_id" class="input-text ">
+
+                                    <input type="hidden" value="{{ Auth::user()->id }}" placeholder="" id="user_id" name="user_id" class="input-text ">
+
                                     <p id="billing_first_name_field" class="form-row form-row-first validate-required">
                                         <label class="" for="billing_first_name">Tỉnh <abbr title="required" class="required">*</abbr>
                                         </label>
-                                        <select name="provinces" id="provinces" class="country_to_state country_select choose provinces">
-                                        <option value="" >---Chọn Tỉnh---</option>
-                                            @foreach ($provinces as $prv)
-                                            <option value="{{$prv->id}}">{{$prv->name}}</option>
+                                        <select name="provinces" style="width: 50%" id="provinces" class="form-control country_to_state country_select choose provinces">
+                                            <option value="">---Chọn Tỉnh---</option>
+                                            @foreach ($provinces as $provinceData)
+                                            <option value="{{ $provinceData->id }}">{{ $provinceData->name }}</option>
                                             @endforeach
                                         </select>
                                     </p>
-                                    <p id="billing_first_name_field" class="form-row form-row-first validate-required ">
-                                        <label class="" for="billing_first_name">Huyện <abbr title="required" class="required">*</abbr>
-                                        </label>
-                                        <select name="districts" id="districts" class="country_to_state country_select choose districts">
-                                            
+
+                                    <p id="billing_first_name_field" class="form-row form-row-first validate-required">
+                                        <label for="exampleInputEmail1">Huyện <abbr title="required" class="required">*</abbr></label>
+                                        <select name="districts" style="width: 50%" id="districts" class="form-control country_to_state country_select choose districts">
+
                                             <option value="">---Chọn Huyện---</option>
-                                           
+
                                         </select>
                                     </p>
+
                                     <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                        <label class="" for="billing_first_name">Xã <abbr title="required" class="required">*</abbr>
-                                        </label>
-                                        <select name="wards" id="wards" class="country_to_state country_select wards">
-                                            
+                                        <label class="" for="billing_first_name">Xã <abbr title="required" class="required">*</abbr> </label>
+                                        <select name="wards" style="width: 50%" id="wards" class="form-control country_to_state country_select wards">
+
                                             <option value="">---Chọn Xã---</option>
-                                           
+
                                         </select>
                                     </p>
+
                                     <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                        <label class="" for="billing_first_name">Địa chỉ <abbr title="required" class="required">*</abbr>
-                                        </label>
-                                        <input type="text"  placeholder="" id="billing_address_1" name="address" required class="input-text ">
+                                        <label class="" for="billing_first_name">Địa chỉ </label>
+                                        <input type="text" placeholder="" style="width: 50%" id="billing_address_1" name="address" required class="input-text form-control">
                                     </p>
+
                                 </div>
                             </div>
-                          
+
                             <div class="form-row place-order col-8">
-
                                 <input type="submit" data-value="Place order" value="Place order" id="place_order" name="woocommerce_checkout_place_order" class="button alt">
-                                
                             </div>
-
-
 
                         </form>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 </div>
+
 <div class="footer-top-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
@@ -292,26 +297,31 @@
         </div>
     </div>
 </div> <!-- End footer bottom area -->
+
 <script type="text/javascript">
-    $(document).ready(function () {
-	$('.choose').on('change',function(){
-        var action = $(this).attr('id');
-        var id = $(this).val();
-        var _token = $('input[name="_token"]').val();
-       var result = "";
-       if(action == 'provinces'){
-        result = 'districts';
-       }else{
-        result = 'wards';
-       }
-       $.ajax({
-        url : "{{route('select-delivery')}}",
-        method : 'POST',
-        data : {action:action,id:id,_token:_token},
-        success: function (data) {
-                       $('#'+result).html(data);
-                    },
-       });
-    })
-});
+    $(document).ready(function() {
+        $('.choose').on('change', function() {
+            var action = $(this).attr('id');
+            var id = $(this).val();
+            var _token = $('input[name="_token"]').val();
+            var result = "";
+            if (action == 'provinces') {
+                result = 'districts';
+            } else {
+                result = 'wards';
+            }
+            $.ajax({
+                url: "{{route('select-delivery')}}",
+                method: 'POST',
+                data: {
+                    action: action,
+                    id: id,
+                    _token: _token
+                },
+                success: function(data) {
+                    $('#' + result).html(data);
+                },
+            });
+        })
+    });
 </script>

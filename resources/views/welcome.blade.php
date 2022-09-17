@@ -106,7 +106,7 @@
                                     </div>
                                 </div>
 
-                                <h2><a href="single-product.html">{{$p->name}}</a></h2>
+                                <h2 style="height: 50px;"><a href="single-product.html">{{$p->name}}</a></h2>
 
                                 <div class="product-carousel-price">
                                     <ins>${{number_format($p->price)}}</ins> <del>$${{number_format($p->old_price)}}</del>

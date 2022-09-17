@@ -58,7 +58,7 @@ Route::get('/showbyBrand/{id}', [App\Http\Controllers\ProductController::class, 
 Route::get('/showbyCate/{id}', [App\Http\Controllers\ProductController::class, 'showbyCate'])->name('showbyCate');
 Route::get('/showProduct/{id}', [App\Http\Controllers\ProductController::class, 'show'])->name('showProduct');
 Route::get('/shop', [App\Http\Controllers\ProductController::class, 'shop'])->name('shop');
-Route::get('/showbyTag/{tag}', [App\Http\Controllers\ProductsController::class, 'showbyTags'])->name('showbyTag');
+Route::get('/showbyTag/{tag}', [App\Http\Controllers\ProductsController::class, 'showbyTag'])->name('showbyTag');
 Route::get('/active', [App\Http\Controllers\ProductController::class, 'active'])->name('active');
 Route::get('/search', [App\Http\Controllers\ProductController::class, 'search'])->name('search');
 //image

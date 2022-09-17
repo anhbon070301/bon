@@ -14,11 +14,27 @@
                         <div class="widget-content">
                             <form action="{{ route('updateBanners', $banner->id) }}" enctype="multipart/form-data" method="post" id="edit-profile" class="form-horizontal">
                                 @csrf
+
                                 <fieldset>
                                     <div class="control-group">
                                         <label class="control-label" for="firstname">Title @if ($errors ->has('title')) <span style="color: red;">*</span>@else <span>*</span> @endif</label>
                                         <div class="controls">
-                                            <input type="text" class="span4" name="title" id="firstname" value="{{ $banner->title }}">
+                                            @if ( $errors -> any() )
+                                                <input class="span3" name="title" value="{!! old('title') !!}" type="text" />
+                                            @else 
+                                                <input type="text" class="span3" name="title" value="{{ $banner->title }}">
+                                            @endif                   
+                                        </div> <!-- /controls -->
+                                    </div> <!-- /control-group -->
+
+                                    <div class="control-group">
+                                        <label class="control-label" for="lastname">Sort Order</label>
+                                        <div class="controls">
+                                            @if ( $errors -> any() )
+                                                <input class="span3" name="sort_order" value="{!! old('sort_order') !!}" type="text" />
+                                            @else 
+                                                <input type="text" class="span3" name="sort_order" value="{{ $banner->sort_order }}">
+                                            @endif                
                                         </div> <!-- /controls -->
                                     </div> <!-- /control-group -->
 
@@ -37,16 +53,13 @@
                                     </div> <!-- /control-group -->
 
                                     <div class="control-group">
-                                        <label class="control-label" for="lastname">Sort Order</label>
-                                        <div class="controls">
-                                            <input type="text" class="span4" id="lastname" name="sort_order" value="{{ $banner->sort_order }}">
-                                        </div> <!-- /controls -->
-                                    </div> <!-- /control-group -->
-
-                                    <div class="control-group">
                                         <label class="control-label" for="firstname">Content @if ($errors ->has('content')) <span style="color: red;">*</span>@else <span>*</span> @endif</label>
                                         <div class="controls">
-                                            <textarea name="content" style="height: 150px;" class="span10 first">{{ $banner->content }}</textarea>
+                                            @if ( $errors -> any() )
+                                                <textarea name="content" style="height: 150px;" class="span10 first">{!! old('content') !!}</textarea>
+                                            @else 
+                                                <textarea name="content" style="height: 150px;" class="span10 first">{{ $banner->content }}</textarea>
+                                            @endif  
                                         </div> <!-- /controls -->
                                     </div> <!-- /control-group -->
 
@@ -60,9 +73,10 @@
 
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-primary">Save</button>
-                                        <button class="btn" type="clear">Cancel</button>
+                                        <button class="btn" type="clear">Clear</button>
                                     </div> <!-- /form-actions -->
                                 </fieldset>
+
                             </form>
                         </div> <!-- /widget-content -->
                         

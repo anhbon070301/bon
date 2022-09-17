@@ -127,9 +127,9 @@ class ProductController extends Controller
         $quantity = 0;
 
         if (isset(Auth::user()->id)) {
-        $cart = Cart::where('user_id',Auth::user()->id)->get();
-            foreach ($cart as $key => $c) {
-                $totalMoney +=  floatval($c['product_price']) *  floatval($c['quantity']);
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+            foreach ($carts as $key => $cartData) {
+                $totalMoney +=  floatval($cartData['product_price']) *  floatval($cartData['quantity']);
                 $quantity = $key +1;
             }
         }
@@ -242,21 +242,21 @@ class ProductController extends Controller
         return redirect()->route('indexProduct');
     }
 
-    public function showbyTags($tag) 
+    public function showbyTag($tag) 
     {
         $totalMoney = 0;
         $quantity = 0;
         
-        if (isset(Auth::user()->id)) {
-        $cart = Cart::where('user_id',Auth::user()->id)->get();
-            foreach ($cart as $key => $c) {
-                $totalMoney +=  floatval($c['product_price']) *  floatval($c['quantity']);
-                $quantity = $key +1;
+        if ( isset(Auth::user()->id) ) {
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+            foreach ($carts as $keyCart => $cartData) {
+                $totalMoney +=  floatval($cartData['product_price']) *  floatval($cartData['quantity']);
+                $quantity = $keyCart +1;
             }
         }
         $products = Product::where('active', self::STATUS_ACTIVE)->where('tags', 'like', '%'.$tag.'%')->orderBy('sort_order', 'ASC')->paginate(12); 
 
-        return view('web/product/show_all',compact('products'))->with('totalMoney',$totalMoney)->with('quantity',$quantity);
+        return view('web/product/show_all',compact('products'))->with('totalMoney', $totalMoney)->with('quantity', $quantity);
     }
 
     public function active(Request $request) 

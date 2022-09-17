@@ -4,6 +4,7 @@
 {!! $productsChart->script() !!}
 @endif
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
 <div class="main">
     <div class="main-inner">
         <div class="container">
@@ -18,20 +19,15 @@
                         <!-- /widget-header -->
                         <div class="widget-content">
                             <div class="shortcuts"> <a href="{{route('showCate')}}" class="shortcut"><i class="shortcut-icon icon-list-alt"></i><span class="shortcut-label"> Category
-                                        </span> </a><a href="{{route('showBrand')}}" class="shortcut"><i class="shortcut-icon icon-bookmark"></i><span class="shortcut-label">Brand</span>
+                                    </span> </a><a href="{{route('showBrand')}}" class="shortcut"><i class="shortcut-icon icon-bookmark"></i><span class="shortcut-label">Brand</span>
                                 </a><a href="{{route('indexProduct')}}" class="shortcut"><i class="shortcut-icon icon-inbox"></i> <span class="shortcut-label">Product
-                                        </span> </a><a href="{{route('indexBanners')}}" class="shortcut"> <i class="shortcut-icon icon-align-justify"></i><span class="shortcut-label">Banner
-                                        </span> </a><a href="{{route('indexUser')}}" class="shortcut"><i class="shortcut-icon icon-user"></i><span class="shortcut-label">Account
-                                        </span> </a><a href="javascript:;" class="shortcut"><i class="shortcut-icon icon-bullhorn"></i><span class="shortcut-label">Report</span>
+                                    </span> </a><a href="{{route('indexBanners')}}" class="shortcut"> <i class="shortcut-icon icon-align-justify"></i><span class="shortcut-label">Banner
+                                    </span> </a><a href="{{route('indexUser')}}" class="shortcut"><i class="shortcut-icon icon-user"></i><span class="shortcut-label">Account
+                                    </span> </a><a href="javascript:;" class="shortcut"><i class="shortcut-icon icon-bullhorn"></i><span class="shortcut-label">Report</span>
                                 </a><a href="{{route('indexOrder')}}" class="shortcut"><i class="shortcut-icon icon-shopping-cart"></i>
                                     <span class="shortcut-label">Order</span> </div>
                             <!-- /widget-content -->
-                        </div>
-                        <!-- /widget -->
-
-
-                        <!-- /widget -->
-                        <!-- /widget -->
+                        </div><!-- /widget -->
                     </div>
                     <!-- /span12 -->
                     <div class="widget-content">
@@ -52,55 +48,49 @@
                                     <td>{{$b->product_name}}</td>
                                     <td><img src="/phone/public/images/{{$b->product_image}}" height="50px" width="200px" alt="Khong tai duoc"></td>
                                     <td>{{$b->total}}</td>
-
                                 </tr>
                                 @endforeach
-
-
                             </tbody>
-
                         </table>
                     </div>
                 </div>
+
                 <div class="span6">
                     <div class="widget">
-                        <div class="widget-content"> 
-                        <h3>TOP ORDER</h3>
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th> Number </th>
-                                    <th> Customer </th>
-                                    <th> Total </th>
-                                    <th> Date </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($or as $key => $o)
-                                <tr>
-                                    <td>{{$key+1}}</td>
-                                    <td>{{$o->customer_name}}</td>
-                                    <td>{{$o->total_money}}</td>
-                                    <td>{{$o->created_date}}</td>
-
-                                </tr>
-                                @endforeach
-
-
-                            </tbody>
-
-                        </table>
+                        <div class="widget-content">
+                            <h3>TOP ORDER</h3>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> Number </th>
+                                        <th> Customer </th>
+                                        <th> Total </th>
+                                        <th> Date </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($or as $key => $o)
+                                    <tr>
+                                        <td>{{$key+1}}</td>
+                                        <td>{{$o->customer_name}}</td>
+                                        <td>{{$o->total_money}}</td>
+                                        <td>{{$o->created_date}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+
                     <div class="widget-content">
-                        <div class="widget-header"> 
+                        <div class="widget-header">
                             <h3> Review</h3>
                         </div>
                         <!-- /widget-header -->
                         <div class="widget-content">
                             <ul class="messages_layout">
-                            @foreach($comment as $c)
-                                <li class="from_user left"> 
+                                @foreach($comment as $c)
+                                <li class="from_user left">
                                     <div class="message_wrap">
                                         <div class="info"> <a class="name">{{$c->user_name}}</a> <span class="time">about: </span> &nbsp <span> <b>{{$c->product_name}}</b></span>
                                             <div class="options_arrow">
@@ -116,21 +106,19 @@
                                         <div class="text">{{$c->comments}} </div>
                                     </div>
                                 </li>
-                            @endforeach
+                                @endforeach
                             </ul>
                         </div>
                         <!-- /widget-content -->
                     </div>
-                </div>
 
+                </div>
                 <!-- /row -->
             </div>
             <!-- /container -->
         </div>
         <!-- /main-inner -->
     </div>
-
-
 
     <div class="extra">
         <div class="extra-inner">

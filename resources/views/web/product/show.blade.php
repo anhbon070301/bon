@@ -1,10 +1,11 @@
 @include('header')
-<html>
 
+<html>
 <body>
     <div class="mainmenu-area">
         <div class="container">
             <div class="row">
+
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
@@ -13,9 +14,10 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
+
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        @if (isset(Auth::user()->id))
+                        @if ( isset(Auth::user()->id) )
                         <li><a href="{{ route('home') }}">Home</a></li>
                         <li class="active"><a href="{{ route('shop') }}">Shop page</a></li>
                         @else
@@ -23,10 +25,10 @@
                         <li class="active"><a href="{{ route('shop') }}">Shop page</a></li>
                         @endif
 
-                        @if(isset(Auth::user()->id))
+                        @if ( isset(Auth::user()->id) )
                         <li><a href="{{ route('showCart', Auth::user()->id) }}">Cart</a></li>
                         @endif
-                        
+
                         <li><a href="#">Category</a></li>
                         <li><a href="#">Others</a></li>
                         <li><a href="#">Contact</a></li>
@@ -47,11 +49,13 @@
             </div>
         </div>
     </div>
+
     <div class="single-product-area">
         <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
+
                     <div class="single-sidebar">
                         <h2 class="sidebar-title">Search Products</h2>
                         <form action="{{ route('showProduct', $product->id) }}">
@@ -73,8 +77,9 @@
                         </div>
                         @endforeach
                     </div>
-                  
+
                 </div>
+
                 <div class="col-md-8">
                     <div class="product-content-right">
                         <div class="row">
@@ -84,7 +89,6 @@
                                     <div class="product-main-img">
                                         <img src="/phone/public/images/{{$product->image}}" alt="">
                                     </div>
-
                                     <div class="product-gallery">
                                         @foreach ($productImg as $productImgList)
                                         <img src="/phone/public/images/{{ $productImgList->image_url }}" alt="">
@@ -132,16 +136,16 @@
                                             <div role="tabpanel" class="tab-pane fade" id="profile">
                                                 <h2>Reviews</h2>
                                                 <div class="submit-review">
-                                                <form action="{{ route('storeComment') }}" method="post" class="cart">
-                                                    @csrf
-                                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                    <input type="hidden" name="user_name" value="{{ Auth::user()->username }}">
-                                                    <input type="hidden" name="product_name" value="{{ $product->name }}">
-                                                    <p><label for="name">Name</label> <input name="name" value="{{ Auth::user()->username }}" disabled type="text"></p>
-                                                    <p><label for="review">Your review</label> <textarea name="comments" id="" cols="30" rows="10"></textarea></p>
-                                                    <p><input type="submit" value="Submit"></p>
-                                                </form>
+                                                    <form action="{{ route('storeComment') }}" method="post" class="cart">
+                                                        @csrf
+                                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                        <input type="hidden" name="user_name" value="{{ Auth::user()->username }}">
+                                                        <input type="hidden" name="product_name" value="{{ $product->name }}">
+                                                        <p><label for="name">Name</label> <input name="name" value="{{ Auth::user()->username }}" disabled type="text"></p>
+                                                        <p><label for="review">Your review</label> <textarea name="comments" id="" cols="30" rows="10"></textarea></p>
+                                                        <p><input type="submit" value="Submit"></p>
+                                                    </form>
                                                 </div>
                                             </div>
                                             @endif
@@ -155,7 +159,7 @@
                                 <div class="related-products-carousel">
                                     @foreach($productTag as $productTagList)
                                     <form action="{{ route('storeCart') }}" method="post">
-                                    @csrf
+                                        @csrf
                                         <div class="single-product">
                                             <div class="product-f-image">
                                                 <img src="/phone/public/images/{{ $productTagList->image }}" alt="">
@@ -187,21 +191,21 @@
 
                             <div class="related-products-wrapper">
                                 <h2 class="related-products-title">Comment</h2>
-                                @foreach ($comments as $comment)
-                                    @if (isset(Auth::user()->id))
-                                        @if ($comment->user_id == Auth::user()->id)
-                                            <form action="{{ route('updateComment') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" value="{{ $comment->id }}" name="id">
-                                                <input type="hidden" value="{{ $comment->product_id }}" name="product_id">
-                                                <p><span style="color: red;">{{ $comment->user_name }}: </span> <input style="border: 2px hidden #b1154a;" type="text" name="comment" value="{{ $comment->comments }}"> <button style=" border: none; background-color: #f4f4f4">Sửa</button> </p>
-                                            </form>
-                                        @else
-                                            <p><span style="color: blue;">{{ $comment->user_name }}: </span> {{ $comment->comments }} </p>
-                                        @endif
-                                    @else
-                                            <p><span>{{ $comment->user_name }}: </span> {{ $comment->comments }} </p>
-                                    @endif
+                                @foreach ($comments as $commentList)
+                                @if (isset(Auth::user()->id))
+                                @if ($commentList->user_id == Auth::user()->id)
+                                <form action="{{ route('updateComment') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" value="{{ $commentList->id }}" name="id">
+                                    <input type="hidden" value="{{ $commentList->product_id }}" name="product_id">
+                                    <p><span style="color: red;">You: </span> <input style="border: 2px hidden #b1154a;" type="text" name="comment" value="{{ $commentList->comments }}"> <button style=" border: none; background-color: #f4f4f4">Sửa</button> </p>
+                                </form>
+                                @else
+                                <p><span style="color: blue;">{{ $commentList->user_name }}: </span> {{ $commentList->comments }} </p>
+                                @endif
+                                @else
+                                <p><span>{{ $commentList->user_name }}: </span> {{ $commentList->comments }} </p>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
@@ -210,7 +214,6 @@
             </div>
         </div>
     </div>
-</div>
 
     <div class="footer-top-area">
         <div class="zigzag-bottom"></div>

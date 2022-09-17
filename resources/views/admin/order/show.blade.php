@@ -1,51 +1,46 @@
 @include ('admin.index')
+
 <div class="main">
     <div class="container-fluid">
-
-
         <div class="card mb-4">
-
-         
-
             <div class="card-body">
                 <div class="table-responsive">
 
                     <div class="widget-content">
-                    <table style="width:100%" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%"> Number </th>
-                                        <th style="width:40%"> Customer Name </th>
-                                        <th style="width:10%"> Total </th>
-                                        <th style="width:10%"> Date </th>
-                                        <th style="width:10%"> Active </th>
-                                        <th style="width:20%"> Action </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($order as $key => $o)
-                                    <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{$o->customer_name}}</td>
-                                        <td>{{$o->total_money}}</td>
-                                        <td>{{$o->created_date}}</td>
-                                        @if($o->status == 0)
+                        <table style="width:100%" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%"> Number </th>
+                                    <th style="width:40%"> Customer Name </th>
+                                    <th style="width:10%"> Total </th>
+                                    <th style="width:10%"> Date </th>
+                                    <th style="width:10%"> Active </th>
+                                    <th style="width:20%"> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach( $orders as $key => $orderList )
+                                <tr>
+                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ $orderList->customer_name }}</td>
+                                    <td>{{ $orderList->total_money }}</td>
+                                    <td>{{ $orderList->created_date }}</td>
+                                    @if( $orderList->status == 0 )
                                         <td>Chưa thanh toán</td>
-                                        @endif
-                                        <td><a class="btn btn-primary"  href="{{route('updateOrder',$o->id)}}">Đã thanh toán</a></td>
-                                    </tr>
-                                    @endforeach
-
-
-                                </tbody>
-
-                            </table>
+                                    @endif
+                                    <td><a class="btn btn-primary" href="{{ route('updateOrder', $orderList->id) }}">Đã thanh toán</a></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="extra">
     <div class="extra-inner">
         <div class="container">

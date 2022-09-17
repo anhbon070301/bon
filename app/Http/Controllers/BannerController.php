@@ -64,7 +64,6 @@ class BannerController extends Controller
             'image_url' => $image_name,
             'sort_order' => $request->sort_order,
             'active' => "1"
-
         ];
         Banner::create($data);
 
@@ -145,7 +144,9 @@ class BannerController extends Controller
 
         return redirect()->route('indexBanners');
     }
-    public function active(Request $request){
+
+    public function active(Request $request)
+    {
         $p = Banner::find($request->id);
         $p->active = $request->status;
         $p->save();
