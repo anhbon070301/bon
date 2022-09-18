@@ -58,8 +58,6 @@
                            
                         @endif
                             
-                           
-                            
                             @if (isset(Auth::user()->username))
                             <li> <i class="fa-solid fa-arrow-right-from-bracket"></i><a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
